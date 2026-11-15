@@ -487,5 +487,5 @@ public enum Support {
         return String(format: "%02d:%02d:%02d,%03d", h, m, s, ms)
     }
 
-    public static func version() -> String { "0.1.0" }
+    public static func version() -> String { "0.1.1" }
 }

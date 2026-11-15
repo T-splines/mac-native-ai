@@ -444,7 +444,15 @@ if printf '%s' "$STT_STATUS" | grep -q '"installed" : true'; then
 else
   skip "zh-CN 语音资产未安装（跑 macai stt --install-assets --locale zh-CN 修复）"
 fi
-assert_eq "$("$MACAI" stt --locales --json | python3 -c 'import json,sys;print("TRUE" if json.load(sys.stdin)["data"]["count"]>0 else "FALSE")')" "TRUE" "支持语言列表非空"
+LOCALES_JSON="$("$MACAI" stt --locales --json)"
+LOCALES_COUNT="$(printf '%s' "$LOCALES_JSON" | python3 -c 'import json,sys;print(json.load(sys.stdin)["data"]["count"])' 2>/dev/null)"
+if [ -z "$LOCALES_COUNT" ]; then
+  bad "支持语言列表 JSON 非法"
+elif [ "$LOCALES_COUNT" -gt 0 ]; then
+  ok "支持语言列表非空（$LOCALES_COUNT 种）"
+else
+  skip "系统语音识别没有可列出的语言（CI/无语音服务的 macOS 环境常见）"
+fi
 
 # ---------------------------------------------------------------- NLP
 head2 "NLP"
