@@ -1,0 +1,43 @@
+# mac-native-ai 隐私扫描模式（通用，可提交）
+#
+# 语法：每行一个 POSIX ERE 正则（macOS BSD grep 兼容，禁止 \d / (?:...) / \b）
+#       '#' 开头的行是注释，空行忽略。
+# 本机专属模式请写入 .privacy-blocklist.local（已 gitignore，永不提交）。
+# 误报豁免：在被扫描行的行尾写 `privacy-check: allow`。
+
+# ---------- 平台访问令牌 ----------
+ghp_[A-Za-z0-9]{20,}
+gho_[A-Za-z0-9]{20,}
+ghu_[A-Za-z0-9]{20,}
+ghs_[A-Za-z0-9]{20,}
+ghr_[A-Za-z0-9]{20,}
+github_pat_[A-Za-z0-9_]{20,}
+npm_[A-Za-z0-9]{36}
+xox[baprs]-[A-Za-z0-9-]{10,}
+AKIA[0-9A-Z]{16}
+ASIA[0-9A-Z]{16}
+AIza[0-9A-Za-z_-]{35}
+sk-(proj-|ant-)?[A-Za-z0-9_-]{20,}
+Bearer[[:space:]]+[A-Za-z0-9._-]{20,}
+eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}
+
+# ---------- 私钥 / 证书 ----------
+-----BEGIN [A-Z ]*PRIVATE KEY-----
+
+# ---------- 个人邮箱（noreply / example.com 不匹配） ----------
+[A-Za-z0-9._%+-]+@(gmail|googlemail|qq|163|126|sina|sohu|outlook|hotmail|live|msn|icloud|me|foxmail|yahoo|protonmail|zoho)\.(com|cn|com\.cn|me|net)
+
+# ---------- 个人主目录路径（文档里一律写 ~/） ----------
+/Users/[A-Za-z0-9._-]+(/|[[:space:]]|$)
+/home/[A-Za-z0-9._-]+(/|[[:space:]]|$)
+C:\\Users\\[A-Za-z0-9._-]+
+
+# ---------- 内网地址与内网域名 ----------
+192\.168\.[0-9]{1,3}\.[0-9]{1,3}
+10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}
+172\.(1[6-9]|2[0-9]|3[01])\.[0-9]{1,3}\.[0-9]{1,3}
+[A-Za-z0-9.-]+\.(local|lan|internal|corp|home)(:[0-9]+|/)
+
+# ---------- 连接串里的口令 ----------
+(postgres|postgresql|mysql|redis|mongodb)://[^[:space:]/@]+:[^[:space:]/@]+@
+password[[:space:]]*[:=][[:space:]]*[^[:space:]"']+

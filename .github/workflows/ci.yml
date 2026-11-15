@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain
+        run: swift --version
+      - name: Release build
+        run: ./scripts/build.sh
+      - name: Privacy scan
+        run: ./scripts/privacy-check.sh --all
+      - name: Full test suite
+        run: ./scripts/test.sh

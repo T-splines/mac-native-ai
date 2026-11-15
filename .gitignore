@@ -1,0 +1,36 @@
+# ---- 密钥 / 凭据 ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+credentials
+secrets
+*_secret
+# 本机专属隐私扫描黑名单（永不提交）
+.privacy-blocklist.local
+# 私有笔记
+*.local.md
+*.private.md
+
+# ---- 构建产物 ----
+.build/
+bin/
+dist/
+*.o
+*.dSYM/
+
+# ---- OS / 编辑器 ----
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# ---- 运行日志 ----
+*.log
+logs/

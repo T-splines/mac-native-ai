@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# mac-native-ai pre-commit 隐私门禁
+# 由 `scripts/setup-dev.sh` 通过 core.hooksPath 安装（本仓库已装好）。
+# 绕过：git commit --no-verify（不推荐；若确需绕过，请同时把该模式补进扫描规则）
+set -uo pipefail
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || {
+  echo "pre-commit: 不在 git 仓库内" >&2
+  exit 1
+}
+
+# 1) 硬门禁：敏感内容扫描
+"$ROOT/scripts/privacy-check.sh" --staged || exit 1
+
+# 2) 软提醒：提交身份是否使用 GitHub noreply 邮箱
+EMAIL="$(git config user.email || true)"
+case "$EMAIL" in
+  *@users.noreply.github.com) ;;
+  "")
+    echo "⚠️  pre-commit: 未设置 user.email，提交作者信息将为空" >&2
+    ;;
+  *)
+    echo "⚠️  pre-commit: user.email='$EMAIL' 不是 GitHub noreply 邮箱。" >&2
+    echo "    本仓库将来公开，建议改为 <id>+<login>@users.noreply.github.com" >&2
+    echo "    （仅提醒，不阻止提交）" >&2
+    ;;
+esac
+
+exit 0
