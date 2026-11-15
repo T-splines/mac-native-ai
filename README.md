@@ -1,5 +1,7 @@
 # macai — macOS built-in AI in one offline binary
 
+**English** | [简体中文](README.zh-CN.md)
+
 **Your Mac already ships six AI capabilities. `macai` gives them a single CLI and an MCP server — zero third-party dependencies, zero API keys, zero per-call fees.**
 
 macOS hides OCR, speech recognition, speech synthesis, text analysis, sound classification
